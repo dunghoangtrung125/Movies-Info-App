@@ -58,7 +58,7 @@ public class MovieApiClient {
             public void run() {
                 handler.cancel(true);
             }
-        }, 1000, TimeUnit.MILLISECONDS);
+        }, 10000, TimeUnit.MILLISECONDS);
     }
 
     private class RetrieveMovies implements Runnable {

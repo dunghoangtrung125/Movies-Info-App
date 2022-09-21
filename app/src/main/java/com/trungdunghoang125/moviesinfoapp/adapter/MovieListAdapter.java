@@ -78,7 +78,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         public void bind(MovieModel movieModel, ViewHolder holder) {
             title.setText(movieModel.getTitle());
             release_date.setText(movieModel.getReleaseDate());
-            //duration.setText(movieModel.getRuntime());
+            duration.setText(String.valueOf(movieModel.getMovieId()));
             rating.setRating(movieModel.getVoteAverage() / 2);
             // Glide to load image
             String url = movieModel.getPosterPath();
