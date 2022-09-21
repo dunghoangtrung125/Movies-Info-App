@@ -18,7 +18,7 @@ public interface MovieApi {
     Call<MovieSearchResponse> searchMovie(
             @Query("api_key") String key,
             @Query("query") String query,
-            @Query("page") String page
+            @Query("page") int page
     );
 
     // Search by ID
@@ -27,5 +27,13 @@ public interface MovieApi {
     Call<MovieModel> getMovieById(
             @Path("movie_id") int movieId,
             @Query("api_key") String key
+    );
+
+    // Get popular movie
+    // https://api.themoviedb.org/3/movie/popular?api_key=cc588ded840baa595eecdb1c6398ffb0&page=1
+    @GET("/3/movie/popular")
+    Call<MovieSearchResponse> getPopularMovies(
+            @Query("api_key") String key,
+            @Query("page") int page
     );
 }

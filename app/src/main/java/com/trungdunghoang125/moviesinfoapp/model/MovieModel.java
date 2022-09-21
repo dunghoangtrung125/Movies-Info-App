@@ -10,24 +10,33 @@ import com.google.gson.annotations.SerializedName;
  */
 public class MovieModel implements Parcelable {
     private String title;
+
     @SerializedName("poster_path")
     private String posterPath;
+
     @SerializedName("release_date")
     private String releaseDate;
+
     @SerializedName("id")
     private int movieId;
+
     @SerializedName("vote_average")
     private float voteAverage;
+
     @SerializedName("overview")
     private String movieOverview;
 
-    public MovieModel(String title, String posterPath, String releaseDate, int movieId, float voteAverage, String movieOverview) {
+    private int runtime;
+
+    // constructor
+    public MovieModel(String title, String posterPath, String releaseDate, int movieId, float voteAverage, String movieOverview, int runtime) {
         this.title = title;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.movieId = movieId;
         this.voteAverage = voteAverage;
         this.movieOverview = movieOverview;
+        this.runtime = runtime;
     }
 
     protected MovieModel(Parcel in) {
@@ -37,6 +46,7 @@ public class MovieModel implements Parcelable {
         movieId = in.readInt();
         voteAverage = in.readFloat();
         movieOverview = in.readString();
+        runtime = in.readInt();
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {
@@ -76,18 +86,23 @@ public class MovieModel implements Parcelable {
         return movieOverview;
     }
 
+    public int getRuntime() {
+        return runtime;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(title);
-        parcel.writeString(posterPath);
-        parcel.writeString(releaseDate);
-        parcel.writeInt(movieId);
-        parcel.writeFloat(voteAverage);
-        parcel.writeString(movieOverview);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(posterPath);
+        dest.writeString(releaseDate);
+        dest.writeInt(movieId);
+        dest.writeFloat(voteAverage);
+        dest.writeString(movieOverview);
+        dest.writeInt(runtime);
     }
 }

@@ -13,18 +13,16 @@ import java.util.List;
 // multiple movie request
 public class MovieSearchResponse {
     @SerializedName("total_results")
-    @Expose
-    private int totalCount;
+    private int mTotalCount;
 
     @SerializedName("results")
-    @Expose
-    private List<MovieModel> movies;
+    private List<MovieModel> mMoviesList;
 
     public int getTotalCount() {
-        return totalCount;
+        return mTotalCount;
     }
 
     public List<MovieModel> getMovies() {
-        return movies;
+        return mMoviesList;
     }
 }
