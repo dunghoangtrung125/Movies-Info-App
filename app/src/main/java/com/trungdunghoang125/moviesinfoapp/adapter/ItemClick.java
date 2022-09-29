@@ -5,6 +5,4 @@ package com.trungdunghoang125.moviesinfoapp.adapter;
  */
 public interface ItemClick {
     void onItemClick(int pos);
-
-    void onCategoryClick(String category);
 }

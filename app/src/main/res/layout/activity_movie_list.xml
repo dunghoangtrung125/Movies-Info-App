@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MovieListActivity">
+    tools:context=".view.MovieListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
@@ -30,7 +30,8 @@
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:queryHint="Search a movie"/>
+            android:iconifiedByDefault="false"
+            android:queryHint="Search a movie" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,7 +43,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_movie_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </androidx.core.widget.NestedScrollView>
 

@@ -1,38 +1,42 @@
-package com.trungdunghoang125.moviesinfoapp;
+package com.trungdunghoang125.moviesinfoapp.view;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.trungdunghoang125.moviesinfoapp.R;
 import com.trungdunghoang125.moviesinfoapp.adapter.ItemClick;
 import com.trungdunghoang125.moviesinfoapp.adapter.MovieListAdapter;
+import com.trungdunghoang125.moviesinfoapp.databinding.ActivityMovieListBinding;
 import com.trungdunghoang125.moviesinfoapp.model.MovieModel;
+import com.trungdunghoang125.moviesinfoapp.utils.Constant;
 import com.trungdunghoang125.moviesinfoapp.viewModels.MovieListViewModel;
 
 import java.util.List;
 
 public class MovieListActivity extends AppCompatActivity implements ItemClick {
-    private static final String TAG = "MovieListActivityTag";
     private MovieListViewModel viewModel;
     private RecyclerView rcMovieList;
     private MovieListAdapter adapter;
     private SearchView searchView;
+    private ActivityMovieListBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        searchView = findViewById(R.id.search_view);
-        rcMovieList = findViewById(R.id.rc_movie_list);
+        binding = ActivityMovieListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        searchView = binding.searchView;
+        rcMovieList = binding.rcMovieList;
 
         // instance of viewModel
         viewModel = new ViewModelProvider(this).get(MovieListViewModel.class);
@@ -45,13 +49,18 @@ public class MovieListActivity extends AppCompatActivity implements ItemClick {
         // Observe any data change
         configRecyclerViewMovie();
         observerDataChange();
+        observerPopMovies();
+        searchPopularMovies();
         setUpSearchView();
+    }
+
+    private void searchPopularMovies() {
+        viewModel.searchPopularMovies(1);
     }
 
     private void configRecyclerViewMovie() {
         adapter = new MovieListAdapter(this);
         rcMovieList.setAdapter(adapter);
-        rcMovieList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void observerDataChange() {
@@ -60,9 +69,23 @@ public class MovieListActivity extends AppCompatActivity implements ItemClick {
             public void onChanged(List<MovieModel> movieModels) {
                 if (movieModels != null) {
                     for (MovieModel movie : movieModels) {
-                        Log.d(TAG, "onChanged: " + movie.getTitle());
-                        adapter.setMovieList(movieModels);
+                        Log.d(Constant.TAG, "onChanged: " + movie.getTitle());
                     }
+                    adapter.setMovieList(movieModels);
+                }
+            }
+        });
+    }
+
+    private void observerPopMovies() {
+        viewModel.getPopMovies().observe(this, new Observer<List<MovieModel>>() {
+            @Override
+            public void onChanged(List<MovieModel> movieModels) {
+                if (movieModels != null) {
+                    for (MovieModel movie : movieModels) {
+                        Log.d(Constant.TAG, "onChanged: " + movie.getTitle());
+                    }
+                    adapter.setMovieList(movieModels);
                 }
             }
         });
@@ -73,6 +96,8 @@ public class MovieListActivity extends AppCompatActivity implements ItemClick {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 viewModel.searchMoviesApi(query, 1);
+                // set the recycler view inflate search movie layout
+                Constant.IS_POPULAR = false;
                 return false;
             }
 
@@ -85,11 +110,9 @@ public class MovieListActivity extends AppCompatActivity implements ItemClick {
 
     @Override
     public void onItemClick(int pos) {
-        Toast.makeText(this, "Item at " + pos + " clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCategoryClick(String category) {
-
+        // Send movie intent to MovieDetail
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(Constant.INTENT_KEY, adapter.getSelectedMovie(pos));
+        startActivity(intent);
     }
 }

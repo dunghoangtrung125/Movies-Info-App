@@ -13,6 +13,8 @@ import java.util.List;
 public class MovieRepository {
     private static MovieRepository instance;
     private MovieApiClient movieApiClient;
+    private String currentQuery;
+    private int currentPage;
 
     private MovieRepository() {
         movieApiClient = MovieApiClient.getInstance();
@@ -29,7 +31,22 @@ public class MovieRepository {
         return movieApiClient.getMovies();
     }
 
+    public LiveData<List<MovieModel>> getPopMovies() {
+        return movieApiClient.getPopMovies();
+    }
+
     public void searchMoviesApi(String query, int pageNum) {
+        currentQuery = query;
+        currentPage = pageNum;
         movieApiClient.searchMoviesApi(query, pageNum);
+    }
+
+    public void searchPopularMovies(int pageNum) {
+        currentPage = pageNum;
+        movieApiClient.searchPopularMovies(pageNum);
+    }
+
+    public void loadNextPage() {
+        searchMoviesApi(currentQuery, currentPage + 1);
     }
 }
